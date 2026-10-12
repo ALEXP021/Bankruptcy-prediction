@@ -1,0 +1,40 @@
+# Data files (V4FinBench dataset)
+*.csv
+*.xlsx
+*.parquet
+
+# Trained models
+*.pkl
+*.joblib
+*.h5
+*.onnx
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment variables
+.env
+
+# Streamlit
+.streamlit/secrets.toml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
