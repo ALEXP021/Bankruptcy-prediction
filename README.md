@@ -8,7 +8,7 @@ A full-stack Machine Learning application for predicting corporate bankruptcy ac
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> 📄 **Full technical documentation (PL):** [docs/Dokumentacja_Modelu.md](docs/Dokumentacja_Modelu.md)
+> 📄 **Full technical documentation (PL):** [docs/Dokumentacja_Modelu.md]([docs/Dokumentacja_Modelu.md](https://github.com/ALEXP021/Bankruptcy-prediction/blob/main/Dokumentacja_Modelu.md)
 
 ---
 
