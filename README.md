@@ -62,3 +62,123 @@ A single model cannot capture the changing dynamics of financial distress. That'
 > ⚠️ **Note:** The dataset is not included in this repository due to its size. Download it from Kaggle and place it in the `data/` folder.
 
 ### Repository Structure
+```
+Bankruptcy-Prediction/
+├── README.md
+├── .gitignore
+├── requirements.txt
+├── app_3.py                  # Streamlit application
+├── api.py                    # FastAPI backend
+├── calibrate_models.py       # Calibration script
+├── normalize_bundle.py       # Bundle normalization (grid → app format)
+├── train_grid_v3.py          # Training grid search
+├── check_bundle.py           # Bundle diagnostics
+├── data/
+│   └── README.md             # Dataset description & download link
+├── docs/
+│   └── Dokumentacja_Modelu.md  # Full technical documentation (PL)
+└── models/
+    └── (trained model files - not tracked)
+```
+
+### Technologies Used
+- **Python 3.10+**
+- **XGBoost** — gradient boosting
+- **Streamlit** — web application
+- **FastAPI** — backend API
+- **Scikit-learn** — preprocessing, calibration
+- **SHAP** — model explainability
+- **Pandas, NumPy** — data processing
+- **Joblib** — model serialization
+- **Docker** — containerization (optional)
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ALEXP021/Bankruptcy-Prediction.git
+   cd Bankruptcy-Prediction
+   ```
+2. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/macOS
+   venv\Scripts\activate     # Windows
+   ```
+4. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### Usage
+1. Download the dataset from Kaggle and place it in the data/ folder.
+2. Run the Streamlit app:
+   ```bash
+   streamlit run app_3.py
+   ```
+3. (Optional) Run the FastAPI backend:
+   ```bash
+   uvicorn api:app --reload
+   ```
+4. Open the app in your browser: http://localhost:8501
+
+### Documentation
+Full technical documentation (PL): Dokumentacja_Modelu.md (https://github.com/ALEXP021/Bankruptcy-prediction/blob/main/Dokumentacja_Modelu.md) — covers methodology, metrics, calibration, XAI, economic impact, limitations, and deployment instructions.
+
+### Future Improvements
+□ Add more feature engineering (interaction terms, ratios).
+□ Hyperparameter tuning with Optuna.
+□ Deploy to a permanent cloud service (Streamlit Cloud, Render, AWS).
+□ Add unit tests for API endpoints.
+□ Add monitoring for model drift.
+
+Author
+Oleksii Panin — [LinkedIn](https://www.linkedin.com/in/oleksii-panin-69a509342/) | [GitHub](https://github.com/ALEXP021)
+_________________________________________________________________________________________________________________________________________________
+
+## 🇵🇱 Polski
+
+### Przegląd projektu
+Projekt dostarcza sześć **niezależnych sygnałów ryzyka** bankructwa przedsiębiorstw na horyzontach od **1 do 6 lat** przed zdarzeniem. Został zrealizowany jako projekt Capstone w **infoShare Academy** (program Data Science + AI).
+
+Model bazowy to **XGBoost**, wytrenowany na zbiorze **V4FinBench** (~1 mln obserwacji firmowo-letnich, ~190 000 unikalnych firm z Polski, Czech, Słowacji i Węgier).
+
+### Dlaczego 6 horyzontów?
+Pojedynczy model nie jest w stanie uchwycić zmieniającej się dynamiki kryzysu finansowego. Dlatego wytrenowaliśmy sześć osobnych modeli XGBoost, każdy zoptymalizowany pod konkretny horyzont predykcji:
+| Horyzont | Znaczenie | Zastosowanie |
+|---------|---------|----------|
+| **h1** | 1 rok przed bankructwem | Detekcja firm już w kryzysie |
+| **h2** | 2 lata przed bankructwem | Prognoza krótkoterminowa, decyzje kredytowe |
+| **h3** | 3 lata przed bankructwem |Ocena ryzyka średnioterminowego |
+| **h4** | 4 lata przed bankructwem | Monitoring ekspozycji długoterminowej |
+| **h5** | 5 lat przed bankructwem| Stress testing portfela |
+| **h6** | 6 lat przed bankructwem | Analiza strategiczna i makro |
+
+### Wyniki modeli (per horyzont)
+| 
+|Horyzont | PR-AUC Lift | Recall | Precision | F2 | ROC-AUC | Wiarygodność |
+|---------|-------------|--------|-----------|-----|---------|-------------|
+| **h1** | **96.9×** | 0.560 | 0.402 | 0.510 | 0.9951 | 🟢 wysoka |
+| **h2** | **26.4×** | 0.402 | 0.070 | 0.234 | 0.9377 | 🟡 średnia |
+| **h3** | **14.4×** | 0.297 | 0.056 | 0.183 | 0.8916 | 🟡 średnia |
+| **h4** | 8.5× | 0.182 | 0.036 | 0.104 | 0.8579 | 🔴 niska |
+| **h5** | 9.6× | 0.199 | 0.022 | 0.085 | 0.8428 | 🔴 niska |
+| **h6** | **10.8×** | 0.243 | 0.021 | 0.084 | 0.8333 | 🟡 średnia |
+
+**Kluczowy wniosek**: h1 najlepszy do detekcji (już w kryzysie), h2 to najlepszy kompromis między horyzontem a dokładnością, h4–h6 przydatne jako sygnały wczesnego ostrzegania na poziomie portfela.
+
+### Kluczowe funkcje
+Dwa warianty bundle:
+
+models_bundle_hybrid.pkl — oryginalny (lepszy ranking, bez prawdziwych prawdopodobieństw).
+
+models_bundle_hybrid_calibrated.pkl — skalibrowany (prawdziwe prawdopodobieństwa, Brier score 10–100× lepszy).
+
+Kalibracja prawdopodobieństw: Isotonic Regression.
+
+Wyjaśnialność (XAI): wartości SHAP dla każdej predykcji.
+
+Aplikacja Streamlit: wybór bundle, horyzontu, formularz 30–50 cech, predykcja w czasie rzeczywistym.
+
+REST API (FastAPI): do integracji z systemami transakcyjnymi.
+
+Batch processing: scoring całych portfeli.
