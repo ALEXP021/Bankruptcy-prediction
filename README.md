@@ -167,18 +167,92 @@ Pojedynczy model nie jest w stanie uchwycić zmieniającej się dynamiki kryzysu
 **Kluczowy wniosek**: h1 najlepszy do detekcji (już w kryzysie), h2 to najlepszy kompromis między horyzontem a dokładnością, h4–h6 przydatne jako sygnały wczesnego ostrzegania na poziomie portfela.
 
 ### Kluczowe funkcje
-Dwa warianty bundle:
+- **Dwa warianty bundle**:
+  - models_bundle_hybrid.pkl — oryginalny (lepszy ranking, bez prawdziwych prawdopodobieństw).
+  - models_bundle_hybrid_calibrated.pkl — skalibrowany (prawdziwe prawdopodobieństwa, Brier score 10–100× lepszy).
+- **Kalibracja prawdopodobieństw**: Isotonic Regression.
+- **Wyjaśnialność (XAI)**: wartości SHAP dla każdej predykcji.
+- **Aplikacja Streamlit**: wybór bundle, horyzontu, formularz 30–50 cech, predykcja w czasie rzeczywistym.
+- **REST API (FastAPI)**: do integracji z systemami transakcyjnymi.
+- **Batch processing**: scoring całych portfeli.
 
-models_bundle_hybrid.pkl — oryginalny (lepszy ranking, bez prawdziwych prawdopodobieństw).
+### Zbiór danych
+- **Źródło**: [V4FinBench Dataset on Kaggle](https://www.kaggle.com/datasets/sebastiantomczak10/v4-group-corporate-bankruptcy/data)
+- **Rozmiar**: ~1 mln obserwacji firmowo-letnich (3+ GB).
+- **Cechy**: ~95–100 wskaźników numerycznych (rentowność, płynność, zadłużenie, efektywność, rynek, makro).
+- **Cel**: Klasyfikacja binarna (bankructwo / brak bankructwa) dla każdego horyzontu.
 
-models_bundle_hybrid_calibrated.pkl — skalibrowany (prawdziwe prawdopodobieństwa, Brier score 10–100× lepszy).
+> ⚠️ Uwaga: Zbiór danych nie jest dołączony do repozytorium ze względu na rozmiar. Pobierz go z Kaggle i umieść w folderze data/.
 
-Kalibracja prawdopodobieństw: Isotonic Regression.
+### Struktura repozytorium
+```
+Bankruptcy-Prediction/
+├── README.md
+├── .gitignore
+├── requirements.txt
+├── app_3.py                  # Streamlit application
+├── api.py                    # FastAPI backend
+├── calibrate_models.py       # Calibration script
+├── normalize_bundle.py       # Bundle normalization (grid → app format)
+├── train_grid_v3.py          # Training grid search
+├── check_bundle.py           # Bundle diagnostics
+├── data/
+│   └── README.md             # Dataset description & download link
+├── docs/
+│   └── Dokumentacja_Modelu.md  # Full technical documentation (PL)
+└── models/
+    └── (trained model files - not tracked)
+```
 
-Wyjaśnialność (XAI): wartości SHAP dla każdej predykcji.
+### Wykorzystane technologie
+- **Python 3.10+**
+- **XGBoost** — gradient boosting
+- **Streamlit** — aplikacja webowa
+- **FastAPI** — backend API
+- **Scikit-learn** — preprocessing, kalibracja
+- **SHAP** — wyjaśnialność modelu
+- **Pandas, NumPy** — przetwarzanie danych
+- **Joblib** — serializacja modeli
+- **Docker** — konteneryzacja (opcjonalnie)
 
-Aplikacja Streamlit: wybór bundle, horyzontu, formularz 30–50 cech, predykcja w czasie rzeczywistym.
+### Instalacja
+1. Sklonuj repozytorium:
+   ```bash
+   git clone https://github.com/ALEXP021/Bankruptcy-Prediction.git
+   cd Bankruptcy-Prediction
+   ```
+2. Utwórz środowisko wirtualne::
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/macOS
+   venv\Scripts\activate     # Windows
+   ```
+3. Zainstaluj zależności:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-REST API (FastAPI): do integracji z systemami transakcyjnymi.
+### Użycie
+1. Pobierz zbiór danych z Kaggle i umieść go w folderze data/.
+2. Uruchom aplikację Streamlit:
+    ```bash
+   streamlit run app_3.py
+   ```
+3. (Opcjonalnie) Uruchom backend FastAPI::
+   ```bash
+   uvicorn api:app --reload
+   ```
+4. Otwórz aplikację w przeglądarce:  http://localhost:8501
 
-Batch processing: scoring całych portfeli.
+### Dokumentacja
+Pełna dokumentacja techniczna (PL): docs/Dokumentacja_Modelu.md (https://github.com/ALEXP021/Bankruptcy-prediction/blob/main/Dokumentacja_Modelu.md) — obejmuje metodologię, metryki, kalibrację, XAI, efekt ekonomiczny, ograniczenia i instrukcję wdrożenia.
+
+### Przyszłe ulepszenia
+□ Dodanie inżynierii cech (interakcje, wskaźniki).
+□ Strojenie hiperparametrów za pomocą Optuna.
+□ Wdrożenie na stały hosting (Streamlit Cloud, Render, AWS).
+□ Dodanie testów jednostkowych dla endpointów API.
+□ Dodanie monitoringu dryfu modelu.
+
+Autor
+Oleksii Panin — [LinkedIn](https://www.linkedin.com/in/oleksii-panin-69a509342/) | [GitHub](https://github.com/ALEXP021)
