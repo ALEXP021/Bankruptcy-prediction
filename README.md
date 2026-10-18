@@ -8,7 +8,7 @@ A full-stack Machine Learning application for predicting corporate bankruptcy ac
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> 📄 **Full technical documentation (PL):** [docs/Dokumentacja_Modelu.md]([docs/Dokumentacja_Modelu.md](https://github.com/ALEXP021/Bankruptcy-prediction/blob/main/Dokumentacja_Modelu.md)).
+> 📄 **Full technical documentation (PL):** [Full technical documentation (PL): Dokumentacja_Modelu.md](Dokumentacja_Modelu.md).
 
 ---
 
@@ -245,7 +245,7 @@ Bankruptcy-Prediction/
 4. Otwórz aplikację w przeglądarce:  http://localhost:8501
 
 ### Dokumentacja
-Pełna dokumentacja techniczna (PL): docs/Dokumentacja_Modelu.md (https://github.com/ALEXP021/Bankruptcy-prediction/blob/main/Dokumentacja_Modelu.md) — obejmuje metodologię, metryki, kalibrację, XAI, efekt ekonomiczny, ograniczenia i instrukcję wdrożenia.
+Pełna dokumentacja techniczna (PL): [Full technical documentation (PL): Dokumentacja_Modelu.md](Dokumentacja_Modelu.md) — obejmuje metodologię, metryki, kalibrację, XAI, efekt ekonomiczny, ograniczenia i instrukcję wdrożenia.
 
 ### Przyszłe ulepszenia
 □ Dodanie inżynierii cech (interakcje, wskaźniki).
